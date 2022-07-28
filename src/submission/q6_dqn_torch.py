@@ -19,30 +19,30 @@ config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 class NatureQN(Linear):
     """
-    Implementation of DeepMind's Nature paper, please consult the methods section 
+    Implementation of DeepMind's Nature paper, please consult the methods section
     of the paper linked below for details on model configuration.
     (https://storage.googleapis.com/deepmind-data/assets/papers/DeepMindNature14236Paper.pdf)
     """
 
     ############################################################
-    # Problem 6a: initialize_models 
+    # Problem 6a: initialize_models
 
     def initialize_models(self):
         """Creates the 2 separate networks (Q network and Target network). The input
-        to these networks will be an image of shape self.img_height * self.img_width with 
+        to these networks will be an image of shape self.img_height * self.img_width with
         channels = self.n_channels * self.config["hyper_params"]["state_history"]
-        
+
         Args:
             q_network (torch model): variable to store our q network implementation
 
             target_network (torch model): variable to store our target network implementation
 
-        TODO: 
+        TODO:
              (1) Set self.q_network to the architecture defined in the Nature paper associated to this question.
                 Padding isn't addressed in the paper but here we will apply padding of size 2 to each dimension of
-                the input to the first conv layer (this should be an argument in nn.Conv2d). 
+                the input to the first conv layer (this should be an argument in nn.Conv2d).
             (2) Set self.target_network to be the same configuration self.q_network but initialized from scratch
-            (3) Be sure to use nn.Sequential in your implementation. 
+            (3) Be sure to use nn.Sequential in your implementation.
 
         Hints:
             (1) Start by figuring out what the input size is to the networks.
@@ -51,7 +51,7 @@ class NatureQN(Linear):
                 - nn.Sequential (https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html)
                 - nn.Conv2d (https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html)
                 - nn.ReLU (https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html)
-                - nn.Flatten (https://pytorch.org/docs/stable/generated/torch.flatten.html)
+                - nn.Flatten (https://pytorch.org/docs/stable/generated/torch.nn.Flatten.html)
                 - nn.Linear (https://pytorch.org/docs/stable/generated/torch.nn.Linear.html)
         """
         state_shape = list(self.env.observation_space.shape)
@@ -61,22 +61,22 @@ class NatureQN(Linear):
         ### END CODE HERE ###
 
     ############################################################
-    # Problem 6b: get_q_values 
+    # Problem 6b: get_q_values
 
     def get_q_values(self, state, network):
         """
         Returns Q values for all actions
 
         Args:
-            state (torch tensor): shape = (batch_size, img height, img width, 
+            state (torch tensor): shape = (batch_size, img height, img width,
                                             nchannels x config["hyper_params"]["state_history"])
-            
+
             network (str): The name of the network, either "q_network" or "target_network"
 
         Returns:
             out (torch tensor): shape = (batch_size, num_actions)
 
-        TODO: 
+        TODO:
             Perform a forward pass of the input state through the selected network
             and return the output values.
 

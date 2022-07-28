@@ -96,7 +96,7 @@ if __name__ == "__main__":
                 print(f"Downloading weights...")
 
                 if shutil.which("curl") is not None:
-                    subprocess.call(["mkdir", "pretrained_weights"], shell=True)
+                    subprocess.call(["mkdir", "./pretrained_weights"])
                     subprocess.call(
                         [
                             "curl",
@@ -107,9 +107,9 @@ if __name__ == "__main__":
                         ]
                     )
                     print(f"Finished downloading weights")
-                
+
                 elif shutil.which("wget") is not None:
-                    subprocess.call(["mkdir", "pretrained_weights"],shell=True)
+                    subprocess.call(["mkdir", "pretrained_weights"])
                     subprocess.call(
                         [
                             "wget",
@@ -119,9 +119,11 @@ if __name__ == "__main__":
                         ]
                     )
                     print(f"Finished downloading weights")
-                
+
                 else:
-                    raise RuntimeError("Pretrained weights were not downloaded, please install curl or wget on your system in order to download pretrained weights.")
+                    raise RuntimeError(
+                        "Pretrained weights not downloaded, please install curl or wget on your system in order to download the pretrained weights."
+                    )
 
             # train model
             model = NatureQN(env, config)
