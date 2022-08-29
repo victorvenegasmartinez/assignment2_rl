@@ -25,6 +25,8 @@ class LinearSchedule(object):
 	"""
 	def __init__(self, eps_begin, eps_end, nsteps):
 		
+		assert eps_begin >= eps_end, "Epsilon begin ({}) needs to be greater than equal to end ({})".format(eps_begin, eps_end)
+
 		self.epsilon = eps_begin
 		self.eps_begin = eps_begin
 		self.eps_end = eps_end
@@ -40,7 +42,8 @@ class LinearSchedule(object):
 		TODO: 
 			modify self.epsilon such that it is a linear interpolation from 
 			self.eps_begin to self.eps_end as t goes from 0 to self.nsteps.
-			For t > self.nsteps self.epsilon remains constant.
+			For t > self.nsteps self.epsilon remains constant as the last updated 
+                        self.epsilon value, which is self.eps_end.
 		"""
 		### START CODE HERE ###
 		### END CODE HERE ###

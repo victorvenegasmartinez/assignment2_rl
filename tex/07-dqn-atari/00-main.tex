@@ -57,19 +57,21 @@ For local development and testing, see the \nameref{intro} for instructions on w
 
 If you wish to monitor your model training in real-time, you may optionally activate tensorboard and port forward the tensorboard outputs on your vm to an available port on your local machine (we strongly recommend that you do). This will enable you to view the tensorboard dashboard and your model training metrics on your local machine in real-time. To get this setup you should first start training your implementation of DQN in order to generate training metrics for tensorboard to plot (or optionally have already trained your implementation and simply wish to visualize the results).
 
-By default tensorboard runs on port 6006. Therefore, we will look to port forward 6006 on your vm to an available port on your local machine using ssh. For this you will need to identify an available port on your local machine. To test if a process is already running on a particular port simply enter the following command in your bash session ~lsof -i : <port_number>~. If this returns a process, you will need to either kill this process or find a new port (don't kill any processes without understanding its purposes and the reprecusions of stopping the process). Once you have established an available port, let's say for example 12345, then run the following command to port forward 6006 from your vm:
+By default tensorboard runs on port 6006. Therefore, we will look to port forward 6006 on your vm to an available port on your local machine using ssh. For this you will need to identify an available port on your local machine. To test if a process is already running on a particular port simply enter the following command in your bash session ~lsof -i : <port_number>~. If this returns a process, you will need to either kill this process or find a new port (don't kill any processes without understanding its purposes and the reprecusions of stopping the process). Once you have established an available port, let's say for example 12345, then run the following command (which will forward vm's port 6006 to your desktop) \textit{from your local machine}:
 
 \begin{lstlisting}
+# Run this from your local machine where you run the browser
 $ ssh -L 12345:localhost:6006 -p xxxxx student@ml-lab-xxxxxxx.eastus.cloudapp.azure.com
 \end{lstlisting}
 
 Where, in the above command, you will need to fill in the sections marked with "x". These values should align with those you regularly use to ssh onto your vm (see \href{https://github.com/scpd-proed/XCS234-Handouts/blob/main/Azure/Azure%20Guide.pdf}{Azure Guide} for further details). You should now be prompted to enter the password you have already setup for your virtual machine. Enter your password and run the following command to start tensorboard:
 
 \begin{lstlisting}
+# Run this from vm
 $ tensorboard --logdir=<results_folder> --host 0.0.0.0
 \end{lstlisting}
 
-Finally, open up a browser on your local machine and visit localhost:12345 to view the tensorboard dashboard.
+Finally, open up a browser on your local machine and visit \textit{http://localhost:12345} to view the tensorboard dashboard. Note that use \textit{http} not \textit{https} for the above command.
 
 \begin{enumerate}[(a)]
 
