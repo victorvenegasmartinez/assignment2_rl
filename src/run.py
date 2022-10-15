@@ -90,40 +90,11 @@ if __name__ == "__main__":
         if config["model"] == "dqn":
             # check weights
             load_path = Path(config["model_training"]["load_path"])
-            if load_path.is_file():
-                print(f"File {load_path} exists, skipping download")
-            else:
-                print(f"Downloading weights...")
 
-                if shutil.which("curl") is not None:
-                    subprocess.call(["mkdir", "./pretrained_weights"])
-                    subprocess.call(
-                        [
-                            "curl",
-                            "-L",
-                            "-o",
-                            "pretrained_weights/model.weights",
-                            "https://stanford.box.com/shared/static/e1mnht3luk8w5mv55ikkgb4rhtloblgv.weights",
-                        ]
-                    )
-                    print(f"Finished downloading weights")
-
-                elif shutil.which("wget") is not None:
-                    subprocess.call(["mkdir", "pretrained_weights"])
-                    subprocess.call(
-                        [
-                            "wget",
-                            "-O",
-                            "pretrained_weights/model.weights",
-                            "https://stanford.box.com/shared/static/e1mnht3luk8w5mv55ikkgb4rhtloblgv.weights",
-                        ]
-                    )
-                    print(f"Finished downloading weights")
-
-                else:
-                    raise RuntimeError(
-                        "Pretrained weights not downloaded, please install curl or wget on your system in order to download the pretrained weights."
-                    )
+            if not load_path.is_file():
+                raise RuntimeError(
+                    "Pretrained weights not found. Please checkout the repo"
+                )
 
             # train model
             model = NatureQN(env, config)
