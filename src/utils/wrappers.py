@@ -8,17 +8,18 @@ from collections import deque
 class MaxAndSkipEnv(gym.Wrapper):
     """
     Takes a max pool over the last n states
-    
-    Attribution: 
-        This class was originally created for CS 294 at 
+
+    Attribution:
+        This class was originally created for CS 294 at
         UC Berkeley - [https://github.com/berkeleydeeprlcourse/homework/blob/dde95f4e126e14a343a53efe25d1c2205854ea3a/hw3/dqn_utils.py#L174]
     """
+
     def __init__(self, env=None, skip=4):
         """Return only every `skip`-th frame"""
         super(MaxAndSkipEnv, self).__init__(env)
         # most recent raw observations (for max pooling across time steps)
         self._obs_buffer = deque(maxlen=2)
-        self._skip       = skip
+        self._skip = skip
 
     def step(self, action):
         total_reward = 0.0
@@ -47,6 +48,7 @@ class PreproWrapper(gym.Wrapper):
     Wrapper for Pong to apply preprocessing
     Stores the state into variable self.obs
     """
+
     def __init__(self, env, prepro, shape, overwrite_render=True, high=255):
         """
         Args:
@@ -61,9 +63,10 @@ class PreproWrapper(gym.Wrapper):
         self.overwrite_render = overwrite_render
         self.viewer = None
         self.prepro = prepro
-        self.observation_space = spaces.Box(low=0, high=high, shape=shape, dtype=np.uint8)
+        self.observation_space = spaces.Box(
+            low=0, high=high, shape=shape, dtype=np.uint8
+        )
         self.high = high
-
 
     def step(self, action):
         """
@@ -73,13 +76,11 @@ class PreproWrapper(gym.Wrapper):
         self.obs = self.prepro(obs)
         return self.obs, reward, done, info
 
-
     def reset(self):
         self.obs = self.prepro(self.env.reset())
         return self.obs
 
-
-    def _render(self, mode='human', close=False):
+    def _render(self, mode="human", close=False):
         """
         Overwrite _render function to vizualize preprocessing
         """
@@ -91,10 +92,11 @@ class PreproWrapper(gym.Wrapper):
                     self.viewer = None
                 return
             img = self.obs
-            if mode == 'rgb_array':
+            if mode == "rgb_array":
                 return img
-            elif mode == 'human':
+            elif mode == "human":
                 from gym.envs.classic_control import rendering
+
                 if self.viewer is None:
                     self.viewer = SimpleImageViewer()
                 self.viewer.imshow(img)

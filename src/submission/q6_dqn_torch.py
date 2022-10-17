@@ -8,7 +8,8 @@ from .q3_schedule import LinearExploration, LinearSchedule
 from .q5_linear_torch import Linear
 
 import yaml
-yaml.add_constructor('!join', join)
+
+yaml.add_constructor("!join", join)
 
 config_file = open("config/q6_dqn.yml")
 config = yaml.load(config_file, Loader=yaml.FullLoader)
@@ -16,6 +17,7 @@ config = yaml.load(config_file, Loader=yaml.FullLoader)
 ############################################################
 # Problem 6: Implementing DeepMind's DQN
 ############################################################
+
 
 class NatureQN(Linear):
     """
@@ -91,4 +93,3 @@ class NatureQN(Linear):
         ### END CODE HERE ###
 
         return out
-

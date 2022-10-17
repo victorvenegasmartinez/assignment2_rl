@@ -163,5 +163,5 @@ if __name__ == "__main__":
 
     else:
         sys.exit(
-            "Incorrectly specified environment,  config['model'] should either be 'Pong-v0' or 'linear'."
+            "Incorrectly specified environment,  config['model'] should either be 'Pong-v5' or 'linear'."
         )

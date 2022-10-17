@@ -136,7 +136,7 @@ class Test_5e(GradedTestCase):
         nn.init.constant_(model.target_network.bias, 0.2)
         state = torch.full(
             (
-                1,
+                2,
                 img_height,
                 img_width,
                 n_channels * q5_config["hyper_params"]["state_history"],
@@ -147,10 +147,12 @@ class Test_5e(GradedTestCase):
         with torch.no_grad():
             q_values = model.get_q_values(state, "q_network")
             target_q_values = model.get_q_values(state, "target_network")
-        actions = torch.tensor([1], dtype=torch.int)
-        rewards = torch.tensor([5], dtype=torch.float)
-        done_mask = torch.tensor([0], dtype=torch.bool)
+        actions = torch.tensor([1, 3], dtype=torch.int)
+        rewards = torch.tensor([5, 5], dtype=torch.float)
+        done_mask = torch.tensor([0, 0], dtype=torch.bool)
 
+        q_values[0,[0,2,3]] -= 1
+        q_values[1,[0,1,2]] -= 1
         loss = model.calc_loss(q_values, target_q_values, actions, rewards, done_mask)
         self.assertEquals(round(loss.item(), 1), 424.4)
 
