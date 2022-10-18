@@ -413,8 +413,9 @@ class QN(object):
         env = gym.make(self.config["env"]["env_name"])
         env = gym.wrappers.RecordVideo(
             env,
-            self.config["output"]["record_path"],
+            video_folder=self.config["output"]["record_path"],
             step_trigger=lambda x: x % 100 == 0,
+            name_prefix=self.config["model"],
         )
         env = MaxAndSkipEnv(env, skip=self.config["hyper_params"]["skip_frame"])
         env = PreproWrapper(

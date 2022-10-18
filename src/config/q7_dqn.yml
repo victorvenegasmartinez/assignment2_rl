@@ -3,7 +3,7 @@ model: "dqn"
 env:
     env_name: "ALE/Pong-v5"
     overwrite_render: True
-    record: True
+    record: False # use `record_episode.py` instead
     high: 255.
 
 output:
