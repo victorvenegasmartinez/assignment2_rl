@@ -58,7 +58,8 @@ class ReplayBuffer(object):
         self.obs = None
         self.action = None
         self.reward = None
-        self.done = None
+        self.terminated = None
+        self.truncated = None
 
     def can_sample(self, batch_size):
         """Returns true if `batch_size` different transitions can be sampled from the buffer."""
@@ -73,11 +74,14 @@ class ReplayBuffer(object):
         next_obs_batch = np.concatenate(
             [self._encode_observation(idx + 1)[None] for idx in idxes], 0
         )
-        done_mask = np.array(
-            [1.0 if self.done[idx] else 0.0 for idx in idxes], dtype=np.float32
+        terminated_mask = np.array(
+            [1.0 if self.terminated[idx] else 0.0 for idx in idxes], dtype=np.float32
+        )
+        truncated_mask = np.array(
+            [1.0 if self.truncated[idx] else 0.0 for idx in idxes], dtype=np.float32
         )
 
-        return obs_batch, act_batch, rew_batch, next_obs_batch, done_mask
+        return obs_batch, act_batch, rew_batch, next_obs_batch, terminated_mask, truncated_mask
 
     def sample(self, batch_size):
         """Sample `batch_size` different transitions.
@@ -142,7 +146,7 @@ class ReplayBuffer(object):
         if start_idx < 0 and self.num_in_buffer != self.size:
             start_idx = 0
         for idx in range(start_idx, end_idx - 1):
-            if self.done[idx % self.size]:
+            if self.terminated[idx % self.size] or self.truncated[idx % self.size]:
                 start_idx = idx + 1
         missing_context = self.frame_history_len - (end_idx - start_idx)
         # if zero padding is needed for missing context
@@ -180,7 +184,8 @@ class ReplayBuffer(object):
             self.obs = np.empty([self.size] + list(frame.shape), dtype=np.uint8)
             self.action = np.empty([self.size], dtype=np.int32)
             self.reward = np.empty([self.size], dtype=np.float32)
-            self.done = np.empty([self.size], dtype=bool)
+            self.terminated = np.empty([self.size], dtype=bool)
+            self.truncated = np.empty([self.size], dtype=bool)
         self.obs[self.next_idx] = frame
 
         ret = self.next_idx
@@ -189,7 +194,7 @@ class ReplayBuffer(object):
 
         return ret
 
-    def store_effect(self, idx, action, reward, done):
+    def store_effect(self, idx, action, reward, terminated, truncated):
         """Store effects of action taken after obeserving frame stored
         at index idx. The reason `store_frame` and `store_effect` is broken
         up into two functions is so that once can call `encode_recent_observation`
@@ -203,9 +208,12 @@ class ReplayBuffer(object):
             Action that was performed upon observing this frame.
         reward: float
             Reward that was received when the actions was performed.
-        done: bool
+        terminated: bool
             True if episode was finished after performing that action.
+        truncated: bool
+            True if episode was truncated after performing that action.
         """
         self.action[idx] = action
         self.reward[idx] = reward
-        self.done[idx] = done
+        self.terminated[idx] = terminated
+        self.truncated[idx] = truncated

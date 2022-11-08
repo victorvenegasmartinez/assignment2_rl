@@ -57,7 +57,8 @@ class DQN(QN):
         target_q_values: torch.Tensor,
         actions: torch.Tensor,
         rewards: torch.Tensor,
-        done_mask: torch.Tensor,
+        truncated_mask: torch.Tensor, 
+        terminated_mask: torch.Tensor
     ) -> torch.Tensor:
         """
         Set (Q_target - Q)^2
@@ -182,7 +183,7 @@ class DQN(QN):
             loss: (Q - Q_target)^2
         """
         self.timer.start("update_step/replay_buffer.sample")
-        s_batch, a_batch, r_batch, sp_batch, done_mask_batch = replay_buffer.sample(
+        s_batch, a_batch, r_batch, sp_batch, terminated_mask_batch, truncated_mask_batch = replay_buffer.sample(
             self.config["hyper_params"]["batch_size"]
         )
         self.timer.end("update_step/replay_buffer.sample")
@@ -200,8 +201,11 @@ class DQN(QN):
         a_batch = torch.tensor(a_batch, dtype=torch.uint8, device=self.device)
         r_batch = torch.tensor(r_batch, dtype=torch.float, device=self.device)
         sp_batch = torch.tensor(sp_batch, dtype=torch.uint8, device=self.device)
-        done_mask_batch = torch.tensor(
-            done_mask_batch, dtype=torch.bool, device=self.device
+        terminated_mask_batch = torch.tensor(
+            terminated_mask_batch, dtype=torch.bool, device=self.device
+        )
+        truncated_mask_batch = torch.tensor(
+            truncated_mask_batch, dtype=torch.bool, device=self.device
         )
         self.timer.end("update_step/converting_tensors")
 
@@ -219,15 +223,15 @@ class DQN(QN):
         self.timer.start("update_step/forward_pass_target")
         with torch.no_grad():
             sp = self.process_state(sp_batch)
-            target_q_values = self.get_q_values(sp, "target_network")
-        self.timer.end("update_step/forward_pass_target")
+            target_q_values = self.get_q_values(sp, 'target_network')
+        self.timer.end('update_step/forward_pass_target')
 
-        self.timer.start("update_step/loss_calc")
+        self.timer.start('update_step/loss_calc')
         loss = self.calc_loss(
-            q_values, target_q_values, a_batch, r_batch, done_mask_batch
+            q_values, target_q_values, a_batch, r_batch, terminated_mask_batch, truncated_mask_batch
         )
-        self.timer.end("update_step/loss_calc")
-        self.timer.start("update_step/loss_backward")
+        self.timer.end('update_step/loss_calc')
+        self.timer.start('update_step/loss_backward')
         loss.backward()
         self.timer.end("update_step/loss_backward")
 

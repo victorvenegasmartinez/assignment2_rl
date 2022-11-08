@@ -57,6 +57,7 @@ class EnvTest(object):
             self.observation_space.states[self.cur_state],
             reward,
             self.num_iters >= 5,
+            False,
             {"ale.lives": 0},
         )
 

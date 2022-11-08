@@ -224,12 +224,12 @@ class QN(object):
 
                 # perform action in env
                 self.timer.start("env.step")
-                new_state, reward, done, info = self.env.step(action)
+                new_state, reward, terminated, truncated, info = self.env.step(action)
                 self.timer.end("env.step")
 
                 # store the transition
                 self.timer.start("replay_buffer.store_effect")
-                replay_buffer.store_effect(idx, action, reward, done)
+                replay_buffer.store_effect(idx, action, reward, terminated, truncated)
                 state = new_state
                 self.timer.end("replay_buffer.store_effect")
 
@@ -279,7 +279,7 @@ class QN(object):
 
                 # count reward
                 total_reward += reward
-                if done or t >= self.config["hyper_params"]["nsteps_train"]:
+                if terminated or truncated or t >= self.config["hyper_params"]["nsteps_train"]:
                     break
 
             # updates to perform at the end of an episode
@@ -381,15 +381,15 @@ class QN(object):
                 action = self.get_action(q_input)
 
                 # perform action in env
-                new_state, reward, done, info = env.step(action)
+                new_state, reward, terminated, truncated, info = env.step(action)
 
                 # store in replay memory
-                replay_buffer.store_effect(idx, action, reward, done)
+                replay_buffer.store_effect(idx, action, reward, terminated, truncated)
                 state = new_state
 
                 # count reward
                 total_reward += reward
-                if done:
+                if terminated or truncated:
                     break
 
             # updates to perform at the end of an episode
@@ -410,7 +410,10 @@ class QN(object):
         """
         Re create an env and record a video for one episode
         """
-        env = gym.make(self.config["env"]["env_name"])
+        env = gym.make(
+            self.config["env"]["env_name"],
+            render_mode=self.config["env"]["render_mode"]
+        )
         env = gym.wrappers.RecordVideo(
             env,
             video_folder=self.config["output"]["record_path"],

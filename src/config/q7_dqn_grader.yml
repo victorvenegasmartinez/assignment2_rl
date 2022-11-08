@@ -7,6 +7,7 @@ env:
     overwrite_render: True
     record: False
     high: 255.
+    render_mode: "rgb_array"
 
 output:
     output_path: &output_path "results/q7_dqn/"

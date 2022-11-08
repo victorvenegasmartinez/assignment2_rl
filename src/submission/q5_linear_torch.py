@@ -117,11 +117,12 @@ class Linear(DQN):
         target_q_values: torch.Tensor,
         actions: torch.Tensor,
         rewards: torch.Tensor,
-        done_mask: torch.Tensor,
+        terminated_mask: torch.Tensor, 
+        truncated_mask: torch.Tensor
     ) -> torch.Tensor:
         """
         Calculates the MSE loss of a given step. The loss for an example is defined:
-            Q_samp(s) = r if done
+            Q_samp(s) = r if terminated or truncated
                         = r + gamma * max_a' Q_target(s', a') otherwise
             loss = (Q_samp(s) - Q(s, a))^2
 
@@ -137,9 +138,12 @@ class Linear(DQN):
 
             rewards: (torch tensor) shape = (batch_size,)
                 The rewards that you actually got at each step (i.e. r)
-
-            done_mask: (torch tensor) shape = (batch_size,)
+            
+            terminated_mask: (torch tensor) shape = (batch_size,)
                 A boolean mask of examples where we reached the terminal state
+
+            truncated_mask: (torch tensor) shape = (batch_size,)
+                A boolean mask of examples where the episode was truncated
 
         TODO:
             Return the MSE loss for a given step. You may use the function description
@@ -149,6 +153,7 @@ class Linear(DQN):
             You may find the following functions useful
                 - torch.max (https://pytorch.org/docs/stable/generated/torch.max.html)
                 - torch.sum (https://pytorch.org/docs/stable/generated/torch.sum.html)
+                - torch.bitwise_or (https://pytorch.org/docs/stable/generated/torch.bitwise_or.html)
                 - torch.gather:
                     * https://pytorch.org/docs/stable/generated/torch.gather.html
                     * https://stackoverflow.com/questions/50999977/what-does-the-gather-function-do-in-pytorch-in-layman-terms
