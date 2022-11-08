@@ -25,20 +25,20 @@ class MaxAndSkipEnv(gym.Wrapper):
         total_reward = 0.0
         done = None
         for _ in range(self._skip):
-            obs, reward, done, info = self.env.step(action)
+            obs, reward, terminated, truncated, info = self.env.step(action)
             self._obs_buffer.append(obs)
             total_reward += reward
-            if done:
+            if terminated or truncated:
                 break
 
         max_frame = np.max(np.stack(self._obs_buffer), axis=0)
 
-        return max_frame, total_reward, done, info
+        return max_frame, total_reward, terminated, truncated, info
 
     def reset(self):
         """Clear past frame buffer and init. to first obs. from inner env."""
         self._obs_buffer.clear()
-        obs = self.env.reset()
+        obs, info = self.env.reset()
         self._obs_buffer.append(obs)
         return obs
 
@@ -72,9 +72,9 @@ class PreproWrapper(gym.Wrapper):
         """
         Overwrites _step function from environment to apply preprocess
         """
-        obs, reward, done, info = self.env.step(action)
+        obs, reward, terminated, truncated, info = self.env.step(action)
         self.obs = self.prepro(obs)
-        return self.obs, reward, done, info
+        return self.obs, reward, terminated, truncated, info
 
     def reset(self):
         self.obs = self.prepro(self.env.reset())

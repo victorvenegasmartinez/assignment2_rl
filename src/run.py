@@ -62,7 +62,7 @@ if __name__ == "__main__":
             config["env"]["env_name"],
             frameskip=(2, 5),
             full_action_space=False,
-            render_mode="rgb_array",
+            render_mode=config["env"]["render_mode"],
         )
         env = MaxAndSkipEnv(env, skip=config["hyper_params"]["skip_frame"])
         env = PreproWrapper(

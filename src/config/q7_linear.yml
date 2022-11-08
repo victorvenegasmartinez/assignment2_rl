@@ -5,6 +5,7 @@ env:
     overwrite_render: True
     record: False # use `record_episode.py` instead
     high: 255.
+    render_mode: "rgb_array"
 
 output:
     output_path: &output_path "results/q7_linear/"

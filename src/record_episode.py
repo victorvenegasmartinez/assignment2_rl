@@ -9,8 +9,6 @@ This script runs one episode and record video with the trained model.
     >>> python ./record_episode.py --output_filename dqn_eisodes
 """
 
-from asyncio import open_unix_connection
-from doctest import OutputChecker
 import sys
 import gym
 import torch
@@ -60,19 +58,23 @@ def record_episode(config: dict, model_file: str, output_file: str = None) -> No
         config["env"]["env_name"],
         frameskip=(2, 5),
         full_action_space=False,
-        render_mode="rgb_array",
+        render_mode=config["env"]["render_mode"]
     )
+    # temporary workaround until ALE issue
+    # https://github.com/mgbellemare/Arcade-Learning-Environment/issues/475
+    # gets fixed
+    env.unwrapped.render_mode = config["env"]["render_mode"]
 
     env = MaxAndSkipEnv(env, skip=config["hyper_params"]["skip_frame"])
     env = PreproWrapper(
         env,
         prepro=greyscale,
         shape=(80, 80, 1),
-        overwrite_render=config["env"]["overwrite_render"],
+        overwrite_render=config["env"]["overwrite_render"]
     )
 
     if output_file is None:
-        output_file = "{}/q7_dqn".format(config["output"]["record_path"])
+        output_file = "{}/{}".format(config["output"]["record_path"], args.config_filename)
     else:
         output_file = output_file
 
@@ -92,7 +94,7 @@ def record_episode(config: dict, model_file: str, output_file: str = None) -> No
         env,
         video_folder=video_folder,
         step_trigger=lambda x: x % 100 == 0,
-        name_prefix=name_prefix,
+        name_prefix=name_prefix
     )
 
     if config["model"] == "dqn":
