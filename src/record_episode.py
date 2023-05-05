@@ -60,10 +60,6 @@ def record_episode(config: dict, model_file: str, output_file: str = None) -> No
         full_action_space=False,
         render_mode=config["env"]["render_mode"]
     )
-    # temporary workaround until ALE issue
-    # https://github.com/mgbellemare/Arcade-Learning-Environment/issues/475
-    # gets fixed
-    env.unwrapped.render_mode = config["env"]["render_mode"]
 
     env = MaxAndSkipEnv(env, skip=config["hyper_params"]["skip_frame"])
     env = PreproWrapper(
