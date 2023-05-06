@@ -20,6 +20,9 @@ model_training:
     log_freq: 50
     eval_freq: 1000
     soft_epsilon: 0
+    device: "cpu" # cpu/gpu
+    compile: False
+    compile_mode: "default"
 
 hyper_params:
     nsteps_train: 10000

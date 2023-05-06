@@ -14,7 +14,13 @@ class DQN(QN):
         self.q_network = None
         self.target_network = None
         self.optimizer = None
-        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+        self.device = "cpu"
+        if config["model_training"]["device"] == "gpu":
+            if torch.cuda.is_available(): 
+                self.device = "cuda"
+            elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+                self.device = "mps"
         print(f"Running model on device {self.device}")
         super().__init__(env, config, logger)
         self.summary_writer = SummaryWriter(
@@ -116,6 +122,17 @@ class DQN(QN):
             self.q_network.apply(init_weights)
         self.q_network = self.q_network.to(self.device)
         self.target_network = self.target_network.to(self.device)
+
+        try:
+            if self.config["model_training"]["compile"] == True:
+                self.q_network = torch.compile(self.q_network, mode=self.config["model_training"]["compile_mode"])
+                self.target_network = torch.compile(self.target_network, mode=self.config["model_training"]["compile_mode"])
+                print("Model compiled")
+        except Exception as err:
+            print(f"Model compile not supported: {err}")
+
+        
+
         self.add_optimizer()
 
     def initialize(self):

@@ -1,4 +1,4 @@
-name: XCS234_A2
+name: XCS234_A2_CUDA
 channels:
   - defaults
   - conda-forge
@@ -23,5 +23,4 @@ dependencies:
     - cmake==3.26.3; sys_platform != "win32"
     - wget==3.2; sys_platform != "win32"
     - "--find-links https://download.pytorch.org/whl/torch_stable.html"
-    - torch==2.0.0; sys_platform != "linux" and sys_platform != "win32"
-    - torch==2.0.0+cpu; sys_platform == "linux" or sys_platform == "win32"
+    - torch==2.0.0+cu117

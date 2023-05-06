@@ -23,6 +23,9 @@ model_training:
     eval_freq: 250000
     record_freq: 250000
     soft_epsilon: 0.05
+    device: "gpu" # cpu/gpu
+    compile: False
+    compile_mode: "default"
 
 hyper_params:
     nsteps_train: 500000
