@@ -31,8 +31,8 @@ class Linear(DQN):
     def initialize_models(self):
         """
         Creates the 2 separate networks (Q network and Target network). The input
-        to these networks will be an image of shape self.img_height * self.img_width with
-        channels = self.n_channels * self.config["hyper_params"]["state_history"].
+        to these networks will be an image of shape img_height * img_width with
+        channels = n_channels * self.config["hyper_params"]["state_history"].
 
         - self.network (torch model): variable to store our q network implementation
         - self.target_network (torch model): variable to store our target network implementation
@@ -157,14 +157,10 @@ class Linear(DQN):
                 - torch.gather:
                     * https://pytorch.org/docs/stable/generated/torch.gather.html
                     * https://stackoverflow.com/questions/50999977/what-does-the-gather-function-do-in-pytorch-in-layman-terms
-                - torch.nn.functional.one_hot (https://pytorch.org/docs/stable/generated/torch.nn.functional.one_hot.html#torch.nn.functional.one_hot)
-                - torch.nn.functional.mse_loss (https://pytorch.org/docs/stable/generated/torch.nn.functional.mse_loss.html#torch.nn.functional.mse_loss)
 
             You may need to use the variables:
                 - self.config["hyper_params"]["gamma"]
-                - self.num_actions
         """
-        num_actions = self.env.action_space.n
         gamma = self.config["hyper_params"]["gamma"]
         ### START CODE HERE ###
         ### END CODE HERE ###
