@@ -30,9 +30,8 @@ class NatureQN(Linear):
     # Problem 6a: initialize_models
 
     def initialize_models(self):
-        """Creates the 2 separate networks (Q network and Target network). The input
-        to these networks will be an image of shape self.img_height * self.img_width with
-        channels = self.n_channels * self.config["hyper_params"]["state_history"]
+        """Creates the 2 separate networks (Q network and Target network). The in_channels 
+        to Conv2d networks will n_channels * self.config["hyper_params"]["state_history"]
 
         Args:
             q_network (torch model): variable to store our q network implementation
