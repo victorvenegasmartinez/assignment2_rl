@@ -79,7 +79,8 @@ class Linear(DQN):
 
         Hints:
             (1) Look up torch.flatten (https://pytorch.org/docs/stable/generated/torch.flatten.html)
-            (2) You can forward a tensor through a network by simply calling it (i.e. network(tensor))
+            (2) Pay attention to the torch.flatten `start_dim` Parameter 
+            (3) You can forward a tensor through a network by simply calling it (i.e. network(tensor))
         """
         out = None
 
