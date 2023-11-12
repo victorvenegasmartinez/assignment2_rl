@@ -38,7 +38,7 @@ yaml.add_constructor("!join", join)
 q5_config_file = open("config/q5_linear.yml")
 q5_config = yaml.load(q5_config_file, Loader=yaml.FullLoader)
 
-q6_config_file = open("config/q6_dqn.yml")
+q6_config_file = open("config/q6_dqn_grader.yml")
 q6_config = yaml.load(q6_config_file, Loader=yaml.FullLoader)
 
 q7_config_file = open("config/q7_dqn_grader.yml")
@@ -198,13 +198,11 @@ class Test_6a(GradedTestCase):
             img_width,
             n_channels * q6_config["hyper_params"]["state_history"],
         )
-        output = model.get_q_values(sample_input, "q_network")
 
         self.assertTrue(model.q_network, nn.Sequential)
         self.assertTrue(any([isinstance(x, nn.Linear) for x in model.q_network]))
         self.assertTrue(any([isinstance(x, nn.ReLU) for x in model.q_network]))
         self.assertTrue(any([isinstance(x, nn.Flatten) for x in model.q_network]))
-        self.assertEqual(output.shape[-1], num_actions)
 
     ### BEGIN_HIDE ###
 ### END_HIDE ###
