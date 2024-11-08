@@ -5,12 +5,13 @@ This script runs one episode and record video with the trained model.
 
     Example: run either with default parameters or with custom parameters
     >>> python ./record_episode.py
-    >>> python ./record_episode.py --config_filename q7_dqn
+    >>> python ./record_episode.py --config_filename q4_dqn
     >>> python ./record_episode.py --output_filename dqn_eisodes
 """
 
 import sys
-import gym
+import gymnasium as gym
+import ale_py
 import torch
 import torch.nn as nn
 import yaml
@@ -21,7 +22,9 @@ from pathlib import Path
 from utils.general import get_logger, join
 from utils.preprocess import greyscale
 from utils.wrappers import PreproWrapper, MaxAndSkipEnv
-from submission.q6_dqn_torch import NatureQN
+from submission import NatureQN
+
+gym.register_envs(ale_py)
 
 # supress gym warnings
 warnings.filterwarnings("ignore", module=r"gym")
@@ -35,7 +38,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "--config_filename",
     help="The name of the config file in the config/ directory to be used for model training.",
-    default="q7_dqn",
+    default="q4_dqn",
 )
 
 parser.add_argument(
@@ -96,7 +99,7 @@ def record_episode(config: dict, model_file: str, output_file: str = None) -> No
     if config["model"] == "dqn":
         # initialize model and load model weights
         model = NatureQN(env, config)
-        model.q_network.load_state_dict(torch.load(model_file, map_location="cpu"))
+        model.q_network.load_state_dict(torch.load(model_file, map_location="cpu", weights_only=True))
     else:
         sys.exit("Incorrectly specified model, config['model'] should be dqn.")
 

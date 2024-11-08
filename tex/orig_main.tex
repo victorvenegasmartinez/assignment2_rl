@@ -152,7 +152,7 @@ You'll need to download the starter code and fill the appropriate functions foll
 \end{framed}
 \section*{Introduction}
 
-In this assignment we will implement deep Q-learning, following DeepMind's paper (\cite{mnih2015human} and \cite{mnih-atari-2013}) that learns to play Atari games from raw pixels. The purpose is to demonstrate the effectiveness of deep neural networks as well as some of the techniques used in practice to stabilize training and achieve better performance. In the process, you'll become familiar with PyTorch. We will train our networks on the \texttt{Pong} environment from OpenAI gym, but the code can easily be applied to any other environment. \\
+In this assignment we will implement deep Q-learning, following DeepMind's paper (\cite{mnih2015human} and \cite{mnih-atari-2013}) that learns to play Atari games from raw pixels. The purpose is to demonstrate the effectiveness of deep neural networks as well as some of the techniques used in practice to stabilize training and achieve better performance. In the process, you'll become familiar with PyTorch. We will train our networks on the \texttt{Pong} environment from Gymnasium (former OpenAI Gym), but the code can easily be applied to any other environment. \\
 
 In Pong, one player scores if the ball passes by the other player. An episode is over when one of the players reaches $21$ points. Thus, the total return of an episode is between $-21$ (lost every point) and $+21$ (won every point). Our agent plays against a decent hard-coded AI player. Average human performance is $-3$ (reported in \cite{mnih-atari-2013}). In this assignment, you will train an AI agent with super-human performance, reaching at least $+10$ (hopefully more!).
 
@@ -373,7 +373,7 @@ Test your code by running \texttt{python q3\_linear\_torch.py} \textbf{locally o
 
 Reminder: Please remember to kill your VM instances when you are done using them!! \\
 
-The Atari environment from OpenAI gym returns observations (or original frames) of size $ (210 \times 160 \times 3) $, the last dimension corresponds to the RGB channels filled with values between $ 0 $ and $ 255 $ (\texttt{uint8}). Following DeepMind's paper \cite{mnih2015human}, we will apply some preprocessing to the observations:   
+The Atari environment from Gymnasium (former OpenAI gym) returns observations (or original frames) of size $ (210 \times 160 \times 3) $, the last dimension corresponds to the RGB channels filled with values between $ 0 $ and $ 255 $ (\texttt{uint8}). Following DeepMind's paper \cite{mnih2015human}, we will apply some preprocessing to the observations:   
 \begin{myitemize}
 \item Single frame encoding: To encode a single frame, we take the maximum value for each pixel color value over the frame being encoded and the previous frame. In other words, we return a pixel-wise max-pooling of the last 2 observations.     
 \item Dimensionality reduction: Convert the encoded frame to grey scale, and rescale it to $(80 \times 80 \times 1)$. (See Figure \ref{fig:pong_env})     
@@ -400,7 +400,7 @@ The above preprocessing is applied to the 4 most recent observations and these e
 \end{figure}
 
 \begin{enumerate}[(a)]
-\item (\textbf{coding and written}, 5 pts). Now we're ready to train on the Atari \texttt{Pong} environment. First, launch linear approximation on pong with \texttt{python q5\_train\_atari\_linear.py} \textbf{on Azure's GPU}. This will train the model for 500,000 steps and should take approximately an hour.  Briefly qualitatively describe how your agent's performance changes over the course of training. Do you think that training for a larger number of steps would likely yield further improvements in performance? Explain your answer.
+\item (\textbf{coding and written}, 5 pts). Now we're ready to train on the Atari \texttt{Pong} environment. First, launch linear approximation on pong with \texttt{python q5\_train\_atari\_linear.py} \textbf{on Azure's GPU}. This will train the model for 500,000 steps and should take approximately half an hour.  Briefly qualitatively describe how your agent's performance changes over the course of training. Do you think that training for a larger number of steps would likely yield further improvements in performance? Explain your answer.
 
 \ifans{
 }

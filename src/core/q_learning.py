@@ -1,5 +1,6 @@
 import os
-import gym
+import gymnasium as gym
+import ale_py
 import numpy as np
 import time
 import sys
@@ -11,6 +12,7 @@ from utils.replay_buffer import ReplayBuffer
 from utils.preprocess import greyscale
 from utils.wrappers import PreproWrapper, MaxAndSkipEnv
 
+gym.register_envs(ale_py)
 
 class Timer:
     def __init__(self, enabled=False) -> None:
