@@ -14,8 +14,9 @@ has_coding = len([q for q in points.values() if not q['is_written']]) > 0
 if has_coding and not meta['multifile_coding_submission']:
   print(R'''{\bf Writing Code and Running the Autograder}
 
-All your code should be entered into ~src/submission.py~. When editing ~src/submission.py~, please only make changes between the lines containing
-~### START_CODE_HERE ###~ and ~### END_CODE_HERE ###~. Do not make changes to
+All your code should be entered into ~src/submission.py~. 
+When editing these files, please only make changes between the lines containing
+~### START_CODE_HERE ###~ and ~### END_CODE_HERE ###~. Do NOT make changes to
 % The astute reader will notice that there are underscores in the
 % START_CODE_HERE and END_CODE_HERE flags, while the source files actually
 % contain spaces.  This is because our solution sanitization script will
@@ -32,8 +33,8 @@ $ python grader.py
 
 There are two types of unit tests used by the autograder:
 \begin{itemize}
-  \item ~basic~:  These tests are provided to make sure that your inputs and outputs are on the right track, and that the hidden evaluation tests will be able to execute.
-  \item ~hidden~: These unit tests are the evaluated elements of the assignment, and run your code with more complex inputs and corner cases. Just because your code passed the basic local tests does not necessarily mean that they will pass all of the hidden tests. These evaluative hidden tests will be run when you submit your code to the Gradescope autograder via the online student portal, and will provide feedback on how many points you have earned.
+  \item ~basic~:  These tests are provided to make sure that your inputs and outputs are on the right track, and can be run locally.
+  \item ~hidden~: These unit tests are NOT visible locally. These hidden tests will be run when you submit your code to the Gradescope autograder via the online student portal, and will provide feedback on how many points you have earned. These tests will evaluate elements of the assignment, and run your code with more complex inputs and corner cases. Just because your code passed the basic local tests does not necessarily mean that they will pass all of the hidden tests.
 \end{itemize}
 
 For debugging purposes, you can run a single unit test locally.  For example, you
@@ -71,7 +72,7 @@ $ python grader.py
 There are two types of unit tests used by the autograder:
 \begin{itemize}
   \item ~basic~:  These tests are provided to make sure that your inputs and outputs are on the right track, and that the hidden evaluation tests will be able to execute.
-  \item ~hidden~: These unit tests are the evaluated elements of the assignment, and run your code with more complex inputs and corner cases. Just because your code passed the basic local tests does not necessarily mean that they will pass all of the hidden tests. These evaluative hidden tests will be run when you submit your code to the Gradescope autograder via the online student portal, and will provide feedback on how many points you have earned.
+  \item ~hidden~: These unit tests are NOT visible locally. These hidden tests will be run when you submit your code to the Gradescope autograder via the online student portal, and will provide feedback on how many points you have earned. These tests will evaluate elements of the assignment, and run your code with more complex inputs and corner cases. Just because your code passed the basic local tests does not necessarily mean that they will pass all of the hidden tests.
 \end{itemize}
 
 For debugging purposes, you can run a single unit test locally.  For example, you

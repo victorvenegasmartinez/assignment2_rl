@@ -3,8 +3,7 @@ import pyglet
 
 class SimpleImageViewer(object):
     """
-    Modified version of gym viewer to chose format (RBG or I)
-    see source here https://github.com/openai/gym/blob/master/gym/envs/classic_control/rendering.py
+    Modified version of gymnasium viewer to chose format (RBG or I)
     """
 
     def __init__(self, display=None):

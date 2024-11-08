@@ -10,7 +10,8 @@ import os
 import pickle
 import gzip
 from graderUtil import graded, CourseTestRunner, GradedTestCase
-import gym
+import gymnasium as gym
+import ale_py
 import numpy as np
 import yaml
 import warnings
@@ -27,6 +28,8 @@ warnings.filterwarnings("ignore", module=r"gym")
 # Import student submission
 import submission
 
+gym.register_envs(ale_py)
+
 # Import configuration settings
 def join(loader, node):
     seq = loader.construct_sequence(node)
@@ -35,14 +38,14 @@ def join(loader, node):
 
 yaml.add_constructor("!join", join)
 
-q5_config_file = open("config/q5_linear.yml")
-q5_config = yaml.load(q5_config_file, Loader=yaml.FullLoader)
+q2_config_file = open("config/q2_linear.yml")
+q2_config = yaml.load(q2_config_file, Loader=yaml.FullLoader)
 
-q6_config_file = open("config/q6_dqn_grader.yml")
-q6_config = yaml.load(q6_config_file, Loader=yaml.FullLoader)
+q3_config_file = open("config/q3_dqn_grader.yml")
+q3_config = yaml.load(q3_config_file, Loader=yaml.FullLoader)
 
-q7_config_file = open("config/q7_dqn_grader.yml")
-q7_config = yaml.load(q7_config_file, Loader=yaml.FullLoader)
+q4_config_file = open("config/q4_dqn_grader.yml")
+q4_config = yaml.load(q4_config_file, Loader=yaml.FullLoader)
 
 # Ensure tests run on CPU
 os.environ["CUDA_VISIBLE_DEVICES"] = " "
@@ -53,10 +56,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = " "
 #########
 
 
-class Test_3a(GradedTestCase):
+class Test_1a(GradedTestCase):
     @graded(timeout=1, is_hidden=False)
     def test_0(self):
-        """3a-0-basic: Check Exploration Strategy 1"""
+        """1a-0-basic: Check Exploration Strategy 1"""
         random.seed(1000)
         env = utils.EnvTest((5, 5, 1))
         exp_strat = submission.LinearExploration(env, 1, 0, 10)
@@ -69,7 +72,7 @@ class Test_3a(GradedTestCase):
 
     @graded(timeout=1, is_hidden=False)
     def test_1(self):
-        """3a-1-basic: Check Exploration Strategy 2"""
+        """1a-1-basic: Check Exploration Strategy 2"""
         env = utils.EnvTest((5, 5, 1))
         exp_strat = submission.LinearExploration(env, 1, 0, 10)
         exp_strat.update(4)
@@ -79,12 +82,12 @@ class Test_3a(GradedTestCase):
 ### END_HIDE ###
 
 
-class Test_5b(GradedTestCase):
+class Test_2b(GradedTestCase):
     @graded(timeout=8, is_hidden=False)
     def test_0(self):
-        """5b-0-basic: Tests for model configurations"""
+        """2b-0-basic: Tests for model configurations"""
         env = utils.EnvTest((5, 5, 1))
-        model = submission.Linear(env, q5_config)
+        model = submission.Linear(env, q2_config)
         state_shape = list(env.observation_space.shape)
         img_height, img_width, n_channels = state_shape
         num_actions = env.action_space.n
@@ -97,7 +100,7 @@ class Test_5b(GradedTestCase):
                     img_height
                     * img_width
                     * n_channels
-                    * q5_config["hyper_params"]["state_history"],
+                    * q2_config["hyper_params"]["state_history"],
                 ]
             ),
         )
@@ -110,7 +113,7 @@ class Test_5b(GradedTestCase):
                     img_height
                     * img_width
                     * n_channels
-                    * q5_config["hyper_params"]["state_history"],
+                    * q2_config["hyper_params"]["state_history"],
                 ]
             ),
         )
@@ -120,12 +123,12 @@ class Test_5b(GradedTestCase):
 ### END_HIDE ###
 
 
-class Test_5e(GradedTestCase):
+class Test_2e(GradedTestCase):
     @graded(timeout=4, is_hidden=False)
     def test_0(self):
-        """5e-0-basic: Test for correctly calculating the loss"""
+        """2e-0-basic: Test for correctly calculating the loss"""
         env = utils.EnvTest((5, 5, 1))
-        model = submission.Linear(env, q5_config)
+        model = submission.Linear(env, q2_config)
         state_shape = list(env.observation_space.shape)
         img_height, img_width, n_channels = state_shape
         num_actions = env.action_space.n
@@ -139,7 +142,7 @@ class Test_5e(GradedTestCase):
                 2,
                 img_height,
                 img_width,
-                n_channels * q5_config["hyper_params"]["state_history"],
+                n_channels * q2_config["hyper_params"]["state_history"],
             ),
             0.5,
         )
@@ -158,12 +161,12 @@ class Test_5e(GradedTestCase):
         self.assertEquals(round(loss.item(), 1), 424.4)
 
 
-class Test_5f(GradedTestCase):
+class Test_2f(GradedTestCase):
     @graded(timeout=1, is_hidden=False)
     def test_0(self):
-        """5f-0-basic: Test for adding the correct optimizer"""
+        """2f-0-basic: Test for adding the correct optimizer"""
         env = utils.EnvTest((5, 5, 1))
-        model = submission.Linear(env, q5_config)
+        model = submission.Linear(env, q2_config)
         state_shape = list(env.observation_space.shape)
         img_height, img_width, n_channels = state_shape
         num_actions = env.action_space.n
@@ -183,12 +186,12 @@ class Test_5f(GradedTestCase):
 ### END_HIDE ###
 
 
-class Test_6a(GradedTestCase):
+class Test_3a(GradedTestCase):
     @graded(timeout=4, is_hidden=False)
     def test_0(self):
-        """6a-0-basic: Tests input and output shapes"""
+        """3a-0-basic: Tests input and output shapes"""
         env = utils.EnvTest((80, 80, 1))
-        model = submission.NatureQN(env, q6_config)
+        model = submission.NatureQN(env, q3_config)
         state_shape = list(env.observation_space.shape)
         img_height, img_width, n_channels = state_shape
         num_actions = env.action_space.n
@@ -196,7 +199,7 @@ class Test_6a(GradedTestCase):
             1,
             img_height,
             img_width,
-            n_channels * q6_config["hyper_params"]["state_history"],
+            n_channels * q3_config["hyper_params"]["state_history"],
         )
 
         self.assertTrue(model.q_network, nn.Sequential)

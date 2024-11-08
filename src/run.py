@@ -2,7 +2,8 @@ import os
 import shutil
 import sys
 import argparse
-import gym
+import gymnasium as gym
+import ale_py
 import subprocess
 from pathlib import Path
 import utils
@@ -10,9 +11,11 @@ from utils.general import get_logger, join
 from utils.preprocess import greyscale
 from utils.wrappers import PreproWrapper, MaxAndSkipEnv
 
-from submission.q3_schedule import LinearExploration, LinearSchedule
-from submission.q5_linear_torch import Linear
-from submission.q6_dqn_torch import NatureQN
+from submission import LinearExploration, LinearSchedule
+from submission import Linear
+from submission import NatureQN
+
+gym.register_envs(ale_py)
 
 import yaml
 import warnings
@@ -29,7 +32,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "--config_filename",
     help="The name of the config file in the config/ directory to be used for model training.",
-    default="q7_dqn",
+    default="q4_dqn",
 )
 """
 This script enables you to run deep Q network or linear approximation according to a custom config file.

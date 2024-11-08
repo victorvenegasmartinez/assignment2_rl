@@ -1,6 +1,6 @@
 import numpy as np
-import gym
-from gym import spaces
+import gymnasium as gym
+import ale_py
 from utils.viewer import SimpleImageViewer
 from collections import deque
 
@@ -63,7 +63,7 @@ class PreproWrapper(gym.Wrapper):
         self.overwrite_render = overwrite_render
         self.viewer = None
         self.prepro = prepro
-        self.observation_space = spaces.Box(
+        self.observation_space = gym.spaces.Box(
             low=0, high=high, shape=shape, dtype=np.uint8
         )
         self.high = high
@@ -76,7 +76,7 @@ class PreproWrapper(gym.Wrapper):
         self.obs = self.prepro(obs)
         return self.obs, reward, terminated, truncated, info
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         self.obs = self.prepro(self.env.reset())
         return self.obs
 
@@ -95,11 +95,11 @@ class PreproWrapper(gym.Wrapper):
             if mode == "rgb_array":
                 return img
             elif mode == "human":
-                from gym.envs.classic_control import rendering
+                from gymnasium.envs.classic_control import rendering
 
                 if self.viewer is None:
                     self.viewer = SimpleImageViewer()
                 self.viewer.imshow(img)
 
         else:
-            super(PongWrapper, self)._render(mode, close)
+            super(PreproWrapper, self)._render(mode, close)
