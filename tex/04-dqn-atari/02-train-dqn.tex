@@ -12,7 +12,7 @@ To speed up training, we have trained the model for 5 million steps (these pretr
 As the training time is roughly 6 hours, you may want to check after a few epochs that your network is making progress.  The following are some training tips:
 
 \begin{itemize}
-\item If you terminate your terminal session, any training processes which are running within this session will terminate.  In order to avoid this, you can start a session with Tmux which will persist even if you lose your connection to the vm. See the \href{https://github.com/scpd-proed/XCS234-Handouts/blob/main/Azure/Azure%20Guide.pdf}{Azure guide} for further details).
+\item If you terminate your terminal session, any training processes which are running within this session will terminate.  In order to avoid this, you can start a session with Tmux which will persist even if you lose your connection to the vm. See the Azure guide for further details).
 \item The evaluation score printed on terminal should start at -21 and increase.
 \item The max of the q values should also be increasing.
 \item The standard deviation of q shouldn't be too small. Otherwise it means that all states have similar q values.
