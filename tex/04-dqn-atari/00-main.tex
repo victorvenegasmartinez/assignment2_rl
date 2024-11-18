@@ -42,7 +42,7 @@ The above preprocessing is applied to the 4 most recent observations and these e
 
 \textbf{Setting up your Virtual Machine}
 
-Follow the instructions in the \href{https://github.com/scpd-proed/XCS234-Handouts/blob/main/Azure/Azure%20Guide.pdf}{Azure Guide} in order to create your vm instance and deploy the assignment code to your vm. Though you will need the GPU to train your model, we strongly advise that you first develop the code locally and ensure that it runs, before attempting to train it on your vm (passing the grader tests and debugging on the test environment should be sufficient). GPU time is expensive and limited. It takes approximately \textbf{8 hours} to train our DQN model. We don't want you to accidentally use all your GPU time for the assignment, debugging your model rather than training and evaluating it. Finally, \textbf{make sure that your VM is turned off whenever you are not using it.}
+Follow the instructions in the Azure Guide in order to create your vm instance and deploy the assignment code to your vm. Though you will need the GPU to train your model, we strongly advise that you first develop the code locally and ensure that it runs, before attempting to train it on your vm (passing the grader tests and debugging on the test environment should be sufficient). GPU time is expensive and limited. It takes approximately \textbf{8 hours} to train our DQN model. We don't want you to accidentally use all your GPU time for the assignment, debugging your model rather than training and evaluating it. Finally, \textbf{make sure that your VM is turned off whenever you are not using it.}
 
 In order to run the model code on your vm, please run the following command to create the proper virtual environment:
 
@@ -64,7 +64,7 @@ By default tensorboard runs on port 6006. Therefore, we will look to port forwar
 $ ssh -L 12345:localhost:6006 -p xxxxx student@ml-lab-xxxxxxx.eastus.cloudapp.azure.com
 \end{lstlisting}
 
-Where, in the above command, you will need to fill in the sections marked with "x". These values should align with those you regularly use to ssh onto your vm (see \href{https://github.com/scpd-proed/XCS234-Handouts/blob/main/Azure/Azure%20Guide.pdf}{Azure Guide} for further details). You should now be prompted to enter the password you have already setup for your virtual machine. Enter your password and run the following command to start tensorboard:
+Where, in the above command, you will need to fill in the sections marked with "x". These values should align with those you regularly use to ssh onto your vm (see Azure Guide for further details). You should now be prompted to enter the password you have already setup for your virtual machine. Enter your password and run the following command to start tensorboard:
 
 \begin{lstlisting}
 # Run this from vm
