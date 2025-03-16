@@ -158,7 +158,7 @@ class Test_2e(GradedTestCase):
         q_values[0,[0,2,3]] -= 1
         q_values[1,[0,1,2]] -= 1
         loss = model.calc_loss(q_values, target_q_values, actions, rewards, terminated_mask, truncated_mask)
-        self.assertEquals(round(loss.item(), 1), 424.4)
+        self.assertEqual(round(loss.item(), 1), 424.4)
 
 
 class Test_2f(GradedTestCase):
