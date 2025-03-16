@@ -20,7 +20,7 @@ The Atari environment from Gymnasium (former OpenAI gym) returns observations (o
 \item Convert the encoded frame to grey scale; crop and rescale it to $(80 \times 80 \times 1)$. (See Figure \ref{fig:pong_env})
 \end{enumerate}
 
-The above preprocessing is applied to the 4 most recent observations and these encoded frames are stacked together to produce the input (of shape $(80 \times 80 \times 4)$) to the Q-function. Also, for each time we decide on an action, we perform that action for 4 time steps. This reduces the frequency of decisions without impacting the performance too much and enables us to play 4 times as many games while training. You can refer to the \textit{Methods} section of DeepMind's \href{https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf}{paper} for more details. \\
+The above preprocessing is applied to the 4 most recent observations and these encoded frames are stacked together to produce the input (of shape $(80 \times 80 \times 1)$) to the Q-function. Also, for each time we decide on an action, we perform that action for 4 time steps. This reduces the frequency of decisions without impacting the performance too much and enables us to play 4 times as many games while training. You can refer to the \textit{Methods} section of DeepMind's \href{https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf}{paper} for more details. \\
 
 \begin{figure}[H]
 \centering

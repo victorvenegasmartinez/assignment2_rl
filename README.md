@@ -3,6 +3,9 @@ This repository contains all code for your assignment!
 The build tools in this repo can be used to run the autograder locally or
 compile a LaTeX submission.
 
+**Important**: if you are cloning this repository using the git client, make sure [Git LFS](https://git-lfs.com) is installed to be able to properly download large files!
+
+
 # What should I submit?
 Take a look at the problem set PDF:
 
