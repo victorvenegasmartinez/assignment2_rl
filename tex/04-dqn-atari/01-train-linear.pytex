@@ -6,7 +6,7 @@ $ python run.py --config_filename=q4_linear
 \end{lstlisting} 
 This will train the model for $500,000$ steps and should take approximately half an hour. Once training is complete observe the contents of ~results/q4_linear~ and in particular the plot ~scores.png~ (the Azure Guide contains details of moving files from the vm to your local machine). 
 
-Using this plot, describe the performance of your linear model on the \texttt{Pong-v0} environment. 
+Using this plot, describe the performance of your linear model on the \texttt{Pong-v5} environment. 
 
 🐍
 import re
