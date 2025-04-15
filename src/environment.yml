@@ -1,4 +1,4 @@
-name: XCS234
+name: XCS234-2
 channels:
   - defaults
   - conda-forge

@@ -59,6 +59,29 @@ class NatureQN(Linear):
         img_height, img_width, n_channels = state_shape
         num_actions = self.env.action_space.n
         ### START CODE HERE ###
+        self.q_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
+                                            nn.ReLU(),
+                                            nn.Conv2d(32, 64, 4, 2),
+                                            nn.ReLU(),
+                                            nn.Conv2d(64, 64, 3, 1),
+                                            nn.ReLU(),
+                                            nn.Flatten(),
+                                            nn.Linear(2304, 512),
+                                            nn.ReLU(),
+                                            nn.Linear(512, num_actions))
+
+        self.target_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
+                                       nn.ReLU(),
+                                       nn.Conv2d(32, 64, 4, 2),
+                                       nn.ReLU(),
+                                       nn.Conv2d(64, 64, 3, 1),
+                                       nn.ReLU(),
+                                       nn.Flatten(),
+                                       nn.Linear(2304, 512),
+                                       nn.ReLU(),
+                                       nn.Linear(512, num_actions))
+
+        self.target_network.load_state_dict(self.q_network.state_dict())
         ### END CODE HERE ###
 
     ############################################################
@@ -89,6 +112,11 @@ class NatureQN(Linear):
         out = None
 
         ### START CODE HERE ###
+        state = torch.permute(state, (0, 3, 1, 2))
+        if network == 'q_network':
+            out = self.q_network(state)
+        else:
+            out = self.target_network(state)
         ### END CODE HERE ###
 
         return out

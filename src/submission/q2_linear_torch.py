@@ -54,6 +54,14 @@ class Linear(DQN):
         img_height, img_width, n_channels = state_shape
         num_actions = self.env.action_space.n
         ### START CODE HERE ###
+        print(img_height)
+        print(img_width)
+        print(n_channels)
+        print(self.config["hyper_params"]["state_history"])
+        print(num_actions)
+        self.q_network = nn.Linear(img_height * img_width * n_channels * self.config["hyper_params"]["state_history"], num_actions)
+        self.target_network = nn.Linear(img_height * img_width * n_channels * self.config["hyper_params"]["state_history"], num_actions)
+        self.target_network.load_state_dict(self.q_network.state_dict())
         ### END CODE HERE ###
 
     ############################################################
@@ -85,6 +93,11 @@ class Linear(DQN):
         out = None
 
         ### START CODE HERE ###
+        state_flatten = torch.flatten(state, start_dim=1)
+        if network == 'q_network':
+            out = self.q_network(state_flatten)
+        else:
+            out = self.target_network(state_flatten)
         ### END CODE HERE ###
 
         return out
@@ -107,6 +120,7 @@ class Linear(DQN):
         """
 
         ### START CODE HERE ###
+        self.target_network.load_state_dict(self.q_network.state_dict())
         ### END CODE HERE ###
 
     ############################################################
@@ -164,6 +178,13 @@ class Linear(DQN):
         """
         gamma = self.config["hyper_params"]["gamma"]
         ### START CODE HERE ###
+        num_actions = self.env.action_space.n
+        max_q_target, max_idx = torch.max(target_q_values, dim=1)
+        q_sample = rewards + (1 - terminated_mask.long()) * gamma * max_q_target
+        one_hot = torch.nn.functional.one_hot(actions.long(), num_classes=num_actions)
+        q_selected = torch.sum(one_hot * q_values, dim=1)
+        loss = torch.nn.functional.mse_loss(q_sample, q_selected)
+        return loss
         ### END CODE HERE ###
 
     ############################################################
@@ -182,4 +203,5 @@ class Linear(DQN):
             What are the input to the optimizer's constructor?
         """
         ### START CODE HERE ###
+        self.optimizer = torch.optim.Adam(self.q_network.parameters())
         ### END CODE HERE ###
