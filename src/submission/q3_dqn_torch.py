@@ -58,26 +58,28 @@ class NatureQN(Linear):
         state_shape = list(self.env.observation_space.shape)
         img_height, img_width, n_channels = state_shape
         num_actions = self.env.action_space.n
+        print(f"state:{self.config["hyper_params"]["state_history"]}")
+        print(f"n_channels:{n_channels}")
         ### START CODE HERE ###
         self.q_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
                                             nn.ReLU(),
-                                            nn.Conv2d(32, 64, 4, 2),
+                                            nn.Conv2d(32, 64, 4, 1),
                                             nn.ReLU(),
-                                            nn.Conv2d(64, 64, 3, 1),
+                                            nn.Conv2d(64, 64, 3, 2),
                                             nn.ReLU(),
                                             nn.Flatten(),
-                                            nn.Linear(2304, 512),
+                                            nn.Linear(3136, 512),
                                             nn.ReLU(),
                                             nn.Linear(512, num_actions))
 
         self.target_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
                                        nn.ReLU(),
-                                       nn.Conv2d(32, 64, 4, 2),
+                                       nn.Conv2d(32, 64, 4, 1),
                                        nn.ReLU(),
-                                       nn.Conv2d(64, 64, 3, 1),
+                                       nn.Conv2d(64, 64, 3, 2),
                                        nn.ReLU(),
                                        nn.Flatten(),
-                                       nn.Linear(2304, 512),
+                                       nn.Linear(3136, 512),
                                        nn.ReLU(),
                                        nn.Linear(512, num_actions))
 
@@ -113,6 +115,33 @@ class NatureQN(Linear):
 
         ### START CODE HERE ###
         state = torch.permute(state, (0, 3, 1, 2))
+        #tmp1=nn.Conv2d(1 * self.config["hyper_params"]["state_history"], 32, 8, 4)
+        #tmp1=tmp1.to('mps')
+        #print(state.shape)
+        #state1=tmp1(state)
+        #print(f"state1a shape:{state1.shape}")
+        #tmp2=nn.ReLU()
+        #tmp3=nn.Conv2d(32, 64, 4, 1)
+        #tmp3=tmp3.to('mps')
+        #state1=tmp2(state1)
+        #print(f"state1b shape:{state1.shape}")
+        #state1=tmp3(state1)
+        #print(f"state1c shape:{state1.shape}")
+        #tmp4=nn.ReLU()
+        #state1=tmp4(state1)
+        #print(f"state1d shape:{state1.shape}")
+        #tmp5=nn.Conv2d(64, 64, 3, 2)
+        #tmp5=tmp5.to('mps')
+        #state1=tmp5(state1)
+        #print(f"state1e shape:{state1.shape}")
+        #tmp6=nn.ReLU()
+        #state1=tmp6(state1)
+        #print(f"state1f shape:{state1.shape}")
+        #tmp7=nn.Flatten()
+        #state1=tmp7(state1)
+
+        
+        #print(f"state1 shape:{state1.shape}")
         if network == 'q_network':
             out = self.q_network(state)
         else:
