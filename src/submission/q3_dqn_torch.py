@@ -61,27 +61,27 @@ class NatureQN(Linear):
         print(f"state:{self.config["hyper_params"]["state_history"]}")
         print(f"n_channels:{n_channels}")
         ### START CODE HERE ###
-        self.q_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
+        self.q_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, (8,8), stride=4,padding=2),
                                             nn.ReLU(),
-                                            nn.Conv2d(32, 64, 4, 1),
+                                            nn.Conv2d(32, 64, (4,4), stride=2),
                                             nn.ReLU(),
-                                            nn.Conv2d(64, 64, 3, 2),
+                                            nn.Conv2d(64, 64, (3,3), stride=1),
                                             nn.ReLU(),
                                             nn.Flatten(),
-                                            nn.Linear(3136, 512),
+                                            nn.Linear(round(img_width/8 - 3) * round(img_height/8 - 3) * 64, 512),
                                             nn.ReLU(),
                                             nn.Linear(512, num_actions))
 
-        self.target_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, 8, 4),
-                                       nn.ReLU(),
-                                       nn.Conv2d(32, 64, 4, 1),
-                                       nn.ReLU(),
-                                       nn.Conv2d(64, 64, 3, 2),
-                                       nn.ReLU(),
-                                       nn.Flatten(),
-                                       nn.Linear(3136, 512),
-                                       nn.ReLU(),
-                                       nn.Linear(512, num_actions))
+        self.target_network = nn.Sequential(nn.Conv2d(n_channels * self.config["hyper_params"]["state_history"], 32, (8,8), stride=4,padding=2),
+                                            nn.ReLU(),
+                                            nn.Conv2d(32, 64, (4,4), stride=2),
+                                            nn.ReLU(),
+                                            nn.Conv2d(64, 64, (3,3), stride=1),
+                                            nn.ReLU(),
+                                            nn.Flatten(),
+                                            nn.Linear(round(img_width/8 - 3) * round(img_height/8 - 3) * 64, 512),
+                                            nn.ReLU(),
+                                            nn.Linear(512, num_actions))
 
         self.target_network.load_state_dict(self.q_network.state_dict())
         ### END CODE HERE ###

@@ -109,6 +109,7 @@ class DQN(QN):
                 load_path.is_file()
             ), f"Provided load_path ({load_path}) does not exist"
             self.q_network.load_state_dict(torch.load(load_path, map_location="cpu", weights_only=True))
+            print(self.q_network)
             print("Load successful!")
         else:
             print("Initializing parameters randomly")
